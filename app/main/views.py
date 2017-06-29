@@ -3,7 +3,7 @@
 from flask import request, jsonify
 from data import bmes_participle
 from . import main
-
+import finalseg
 
 def participle_text(text):
     ans = []
@@ -38,9 +38,12 @@ def post_nlp():
     rejs = request.json
     data = rejs.get('data')
     action = rejs.get('action')
-    if data.get('method') in methods:
-        method = methods.get(data.get('method'))
-        cut_result = method(data.get('text'))
+    method = data.get('method')
+    if method == 'hmm_participle':
+        cut_result = participle_text(data.get('text'))
         return jsonify({'result': 'success', 'cut_result': cut_result})
-    else:
-        return jsonify({'result': 'fail', 'reason': 'not support method'}), 200
+    if method == 'default':
+        sentence = data.get('text')
+        seg_list = finalseg.cut(sentence)
+        res = "/ ".join(seg_list)
+        return jsonify({'result': 'success', 'cut_result': res})
