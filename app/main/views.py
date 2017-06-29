@@ -41,7 +41,6 @@ def post_nlp():
     if data.get('method') in methods:
         method = methods.get(data.get('method'))
         cut_result = method(data.get('text'))
-        print data.get('text')
         return jsonify({'result': 'success', 'cut_result': cut_result})
     else:
         return jsonify({'result': 'fail', 'reason': 'not support method'}), 200
