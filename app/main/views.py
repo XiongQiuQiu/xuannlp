@@ -1,15 +1,13 @@
 #!/use/bin/env python
 # -*- coding=utf-8 -*-
-from flask import Flask, request, jsonify
+from flask import request, jsonify
 from data import bmes_participle
 from . import main
 
 
 def participle_text(text):
-    print text
     ans = []
     prob_path = bmes_participle.cut_sentence(text)
-    print prob_path
     for i in zip(text, prob_path):
         ans.append(i[0]+' ' if i[1] == 'E' or i[1] == 'S' else i[0])
     return ''.join(ans)
