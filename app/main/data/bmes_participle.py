@@ -3,17 +3,15 @@ import os
 import sys
 
 def load_model(file_name):
-    _model_path = os.path.normpath(os.path.join(os.getcwd(), os.path.dirname('train/'+file_name)))
+    _model_path = os.path.normpath(os.path.join(os.getcwd(), os.path.dirname('app/main/data/train/'+file_name)))
+    # _model_path = os.path.normpath(os.path.join(os.getcwd(), os.path.dirname('data/train/' + file_name)))
     fil = file(_model_path, 'rb')
     return eval(fil.read())
 
-# start_prob = load_model('prob_start.py/')
-# trans_prob = load_model('prob_trans.py/')
-# emit_prob = load_model('prob_emit.py/')
+start_prob = load_model('prob_start.py/')
+trans_prob = load_model('prob_trans.py/')
+emit_prob = load_model('prob_emit.py/')
 
-start_prob = load_model('start_prob.py/')
-trans_prob = load_model('trans_prob.py/')
-emit_prob = load_model('emit_prob.py/')
 
 def print_dptable(V):
     print '      ',
@@ -29,7 +27,7 @@ def print_dptable(V):
 def viterbi(obs, states, start_p, tran_p, emis_p):
     V = [{}]
     path = {}
-    obs = obs.decode('utf8')
+    obs = obs
     for y in states:
         V[0][y] = start_p[y] * emis_p[y].get(obs[0], 0.0)
         path[y] = [y]
@@ -44,20 +42,18 @@ def viterbi(obs, states, start_p, tran_p, emis_p):
             newpath[y] = path[state] + [y]
 
         path = newpath
-    print_dptable(V)
+    # print_dptable(V)
     (prob, state) = max([(V[len(obs) - 1][y], y) for y in states])
     return (prob, path[state])
 
 def cut_sentence(sentence):
     states = ['B', 'M', 'E', 'S']
     prob, prob_path = viterbi(sentence, states, start_prob, trans_prob, emit_prob)
-    return prob, prob_path
+    return prob_path
+
 
 if __name__ == '__main__':
     # test_str = '陆承宗淡漠的脸上眉头微蹙'
     test_str = '姚晨和老凌离婚了'
-    prob, prob_path = cut_sentence(test_str)
-    print prob
-    print test_str
-    print prob_path
+    prob_path = cut_sentence(test_str)
     # print zip(test_str.decode('utf-8'), prob_path)
