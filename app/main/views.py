@@ -4,9 +4,12 @@ from flask import request, jsonify
 from data import bmes_participle
 from . import main
 import finalseg
-# import jieba
-# import jieba.posseg
-# import jieba.analyse
+import jieba
+jieba.initialize()
+import jieba.posseg
+#from jieba import posseg
+#import jieba.analyse
+#from jieba import analyse
 
 # def cut_sentence(sentence):
 #     seg_list = jieba.cut(sentence=sentence, HMM=True)

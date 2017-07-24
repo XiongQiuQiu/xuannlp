@@ -16,5 +16,5 @@ def cut_sentence(sentence):
     for word, flag in words:
         if flag=='nr':
             print '/'.join([word, flag])
-
-cut_sentence("姚晨和凌潇肃离婚了")
+print 'test'
+#cut_sentence("姚晨和凌潇肃离婚了")
