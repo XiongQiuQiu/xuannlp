@@ -1,6 +1,6 @@
 #!/use/bin/env python
 # -*- coding=utf-8 -*-
-from __future__ import unicode_literals
+# from __future__ import unicode_literals
 import os
 
 from app import create_app, db
