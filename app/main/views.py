@@ -5,15 +5,13 @@ from data import bmes_participle
 from . import main
 import finalseg
 import jieba
-
+__import__('jieba.posseg')
 
 def cut_sentence(sentence):
-    import jieba
     seg_list = jieba.cut(sentence=sentence, HMM=True)
     return '/'.join(seg_list)
 
 def cut_ansj(sentence):
-    import jieba.posseg
     words = jieba.posseg.cut(sentence=sentence, HMM=True)
     ans = []
     for word, flag in words:
