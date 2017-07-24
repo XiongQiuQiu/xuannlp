@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
+import jieba
 import jieba.posseg
 app = Flask(__name__)
 
