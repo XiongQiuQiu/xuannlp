@@ -5,6 +5,25 @@ from data import bmes_participle
 from . import main
 import finalseg
 
+import sys
+sys.path.append("../")
+
+import jieba
+import jieba.posseg
+import jieba.analyse
+
+def cut_sentence(sentence):
+    seg_list = jieba.cut(sentence=sentence, HMM=True)
+    return '/'.join(seg_list)
+
+def cut_ansj(sentence):
+    words = jieba.posseg.cut(sentence=sentence, HMM=True)
+    ans = []
+    for word, flag in words:
+        if flag == 'nr':
+            ans.append('/'.join([word, flag]))
+    return ','.join(ans)
+
 def participle_text(text):
     ans = []
     prob_path = bmes_participle.cut_sentence(text)
@@ -26,7 +45,7 @@ def verification(request):
     if isinstance(text, unicode):
         return jsonify({'result': 'fail', 'reason': 'text must unicode'}), 200
 
-methods = {'hmm_participle': participle_text}
+methods = {'hmm_participle': participle_text, }
 
 @main.route('/index', methods=['GET'])
 def index():
@@ -47,3 +66,11 @@ def post_nlp():
         seg_list = finalseg.cut(sentence)
         res = "/ ".join(seg_list)
         return jsonify({'result': 'success', 'cut_result': res})
+    if method =='seg_hmm':
+        sentence = data.get('text')
+        seg_str = cut_sentence(sentence)
+        return jsonify({'result': 'success', 'cut_result': seg_str})
+    if method == 'ner_hmm':
+        sentence = data.get('text')
+        ner_cut = cut_ansj(sentence)
+        return jsonify({'result': 'success', 'cut_result': ner_cut})
