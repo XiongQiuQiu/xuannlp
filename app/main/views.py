@@ -4,10 +4,6 @@ from flask import request, jsonify
 from data import bmes_participle
 from . import main
 import finalseg
-
-import sys
-sys.path.append("../")
-
 import jieba
 import jieba.posseg
 import jieba.analyse
