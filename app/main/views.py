@@ -4,20 +4,8 @@ from flask import request, jsonify
 from data import bmes_participle
 from . import main
 import finalseg
-import jieba
-__import__('jieba.posseg')
+from jiebacut import cut_ner
 
-def cut_sentence(sentence):
-    seg_list = jieba.cut(sentence=sentence, HMM=True)
-    return '/'.join(seg_list)
-
-def cut_ansj(sentence):
-    words = jieba.posseg.cut(sentence=sentence, HMM=True)
-    ans = []
-    for word, flag in words:
-        if flag == 'nr':
-            ans.append('/'.join([word, flag]))
-    return ','.join(ans)
 
 def participle_text(text):
     ans = []
@@ -63,9 +51,9 @@ def post_nlp():
         return jsonify({'result': 'success', 'cut_result': res})
     if method =='seg_hmm':
         sentence = data.get('text')
-        seg_str = cut_sentence(sentence)
+        seg_str = cut_ner.cut_sentence(sentence)
         return jsonify({'result': 'success', 'cut_result': seg_str})
     if method == 'ner_hmm':
         sentence = data.get('text')
-        ner_cut = cut_ansj(sentence)
+        ner_cut = cut_ner.cut_ansj(sentence)
         return jsonify({'result': 'success', 'cut_result': ner_cut})
