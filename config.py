@@ -9,7 +9,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     port = 80
-    DEBUG = True
+    #DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True

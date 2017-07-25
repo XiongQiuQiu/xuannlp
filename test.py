@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-import sys
-sys.path.append("../")
-
-import jieba
-
-def cut_sentence(sentence):
-    seg_list = jieba.cut(sentence=sentence, HMM=True)
-    print(", ".join(seg_list))
-    seg_list1 = jieba.cut(sentence=sentence, HMM=False)
-    print(", ".join(seg_list1))
-    words = jieba.posseg.cut(sentence, HMM=True)
+from flask import Flask, jsonify
+import jieba.posseg
+app = Flask(__name__)
+def cut_ansj(sentence):
+    words = jieba.posseg.cut(sentence=sentence, HMM=True)
+    ans = []
     for word, flag in words:
-        if flag=='nr':
-            print '/'.join([word, flag])
+        if flag == 'nr':
+            ans.append('/'.join([word, flag]))
+    return ','.join(ans)
 
-cut_sentence("姚晨和凌潇肃离婚了")
+@app.route('/')
+def hello_world():
+    sentence = u'姚晨和凌潇肃离婚了'
+    ner_cut = cut_ansj(sentence)
+    return jsonify({'result': 'success', 'cut_result': ner_cut})
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
