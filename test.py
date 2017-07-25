@@ -4,8 +4,6 @@ import sys
 sys.path.append("../")
 
 import jieba
-import jieba.posseg
-import jieba.analyse
 
 def cut_sentence(sentence):
     seg_list = jieba.cut(sentence=sentence, HMM=True)
